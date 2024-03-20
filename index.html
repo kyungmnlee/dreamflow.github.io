@@ -1,0 +1,330 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>DreamFlow</title>
+
+
+  <link href="https://fonts.googleapis.com/css?family=Google+Sans|Noto+Sans|Castoro"
+        rel="stylesheet">
+
+  <link rel="stylesheet" href="./static/css/bulma.min.css">
+  <link rel="stylesheet" href="./static/css/bulma-carousel.min.css">
+  <link rel="stylesheet" href="./static/css/bulma-slider.min.css">
+  <link rel="stylesheet" href="./static/css/fontawesome.all.min.css">
+  <link rel="stylesheet"
+        href="https://cdn.jsdelivr.net/gh/jpswalsh/academicons@1/css/academicons.min.css">
+  <link rel="stylesheet" href="./static/css/index.css">
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22></text></svg>">
+
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+  <script defer src="./static/js/fontawesome.all.min.js"></script>
+  <script src="./static/js/bulma-carousel.min.js"></script>
+  <script src="./static/js/bulma-slider.min.js"></script>
+  <script src="./static/js/index.js"></script>
+</head>
+<body>
+
+
+<section class="hero">
+  <div class="hero-body">
+    <div class="container is-max-desktop">
+      <div class="columns is-centered">
+        <div class="column has-text-centered">
+          <h1 class="title is-1 publication-title">DreamFlow: High-quality text-to-3D generation by Approximating Probability Flow</h1>
+          <div class="is-size-5 publication-authors">
+            <span class="author-block">
+              <a href="https://kyungmnlee.github.io">Kyungmin Lee</a><sup>1</sup>,</span>
+            <span class="author-block">
+              <a href="https://sites.google.com/site/kihyuksml">Kihyuk Sohn</a><sup>2</sup>,</span>
+            <span class="author-block">
+              <a href="https://alinlab.kaist.ac.kr/shin.html">Jinwoo Shin</a><sup>1</sup>,
+            </span>
+          </div>
+
+          <div class="is-size-5 publication-authors">
+            <span class="author-block"><sup>1</sup>KAIST,</span>
+            <span class="author-block"><sup>2</sup>Google Research</span>
+          </div>
+
+          <div class="is-size-5 publication-authors">
+            <span style="font-weight: bold;">ICLR 2024 (Spotlight)</span>
+          </div>
+
+          <div class="column has-text-centered">
+            <div class="publication-links">
+              <!-- PDF Link. -->
+              <span class="link-block">
+                <a href="https://openreview.net/forum?id=GURqUuTebY"
+                   class="external-link button is-normal is-rounded is-dark">
+                  <span class="icon">
+                      <i class="fas fa-file-pdf"></i>
+                  </span>
+                  <span>Paper</span>
+                </a>
+              </span>
+
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="section">
+  <div class="container is-max-desktop">
+    <!-- Abstract. -->
+    <div class="columns is-centered has-text-centered">
+      <div class="column is-four-fifths">
+        <h2 class="title is-3">Abstract</h2>
+        <div class="content has-text-justified">
+          <p>
+            Recent progress in text-to-3D generation has been achieved through the utilization of score distillation methods: 
+            they make use of the pre-trained text-to-image (T2I) diffusion models by distilling via the diffusion model 
+            training objective. However, such an approach inevitably results in the use of random timesteps at each update, 
+            which increases the variance of the gradient and ultimately prolongs the optimization process. In this paper, 
+            we propose to enhance the text-to-3D optimization by leveraging the T2I diffusion prior in the generative 
+            sampling process with a predetermined timestep schedule. To this end, we interpret text-to-3D optimization 
+            as a multi-view image-to-image translation problem, and propose a solution by approximating the probability flow. 
+            By leveraging the proposed novel optimization algorithm, we design DreamFlow, a practical three-stage coarse-to-fine 
+            text-to-3D optimization framework that enables fast generation of high-quality and high-resolution (i.e., 1024 x 1024) 
+            3D contents. For example, we demonstrate that DreamFlow is 5 times faster than the existing state-of-the-art text-to-3D 
+            method, while producing more photorealistic 3D contents.
+          </p>
+        </div>
+      </div>
+    </div>
+    <!--/ Abstract. -->
+  </section>
+  <section class="section">
+    <div class="columns is-centered has-text-centered">
+      <div class="column is-four-fifths">
+        <h2 class="title is-3">Approximating Probability Flow ODE</h2>
+        <div class="mySlides">
+          <img src="./static/Figure_2.jpg" style="width:100%; max-width: 1280px;">
+          <div class="imagetext">
+            Our method, approximate probability flow ODE (APFO), uses predetermined timestep schedule in contrast to score distillation sampling (SDS),
+            and amortize optimization to update multi-view images in 3D model. We fine-tune denoiser to accurately compute the probability flow. 
+            </div>
+        </div>
+        <br>
+        <div class="content has-text-justified">
+          <p>
+            We introduce approximate probability flow ODE (APFO), which approximates the probability flow to update 3D model.
+            Given an image rendered from a 3D model, we optimize the image by transporting it to the high-density region of text-to-image
+            diffusion model using Schrodinger bridge. We model the score function of current scene by additional fine-tuning, and 
+            compute the approximate probability flow by the different of the denoiser outputs of pretrained model and fine-tuned model.
+            Alike conventional diffusion sampler, we use decreasing sequence of timesteps to guarantee convergence, and amortize the optimization
+            to optimize the multi-view images in a 3D scene. 
+          </p>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</section>
+<section class="section">
+  <div class="columns is-centered has-text-centered">
+    <div class="column is-four-fifths">
+      <h2 class="title is-3">Coarse-to-fine text-to-3D optimization of DreamFlow</h2>
+      <div class="mySlides">
+        <img src="./static/Figure_2_2.jpg" style="width:100%; max-width: 1280px;">
+        <div class="imagetext">
+          Our text-to-3D generation is done in coarse-to-fine manner; we first optimize NeRF, then extract 3D mesh and fine-tune. 
+          We use same latent diffusion model (denoiser 1) for first and second stage. Lastly, we refine 3D mesh with high-resolution 
+          latent diffusion prior (denoiser 2). At each stage, we optimize with different timestep schedule, which effectively utilize the diffusion priors.
+          </div>
+      </div>
+      <br>
+      <div class="content has-text-justified">
+        <p>
+          The proposed framework, DreamFlow, perform coarse-to-fine text-to-3D optimization for high-quality 3D content generation.
+          We first optimize NeRF (e.g., using hash-grid encoder) using latent diffusion model (e.g., Stable Diffusion v2.1) with resolution of 256x256, 
+          with timesteps decreasing from 1.0 to 0.2. Then, we extract a 3D mesh from stage 1 for efficient 3D modeling, and optimize 3D mesh with resolution
+          of 512x512 using same denoiser of stage 1, with timesteps decreasing from 0.5 to 0.1. Lastly at stage 3, we refine the 3D mesh using diffusion refiner 
+          (e.g., Stable Diffusion XL refiner), to generate 3D mesh in resolution of 1024x1024. 3D mesh refinement significantly enhance the photorealism of 3D 
+          model, compared to prior methods. 
+        </p>
+      </div>
+    </div>
+  </div>
+</div>
+</section>
+
+
+<section class="section">
+  <div>
+    <div class="columns is-centered has-text-centered">
+      <h2 class="title is-3">Results</h2>
+      <p></p>
+    </div>
+
+    <div class="columns is-centered has-text-centered">
+      <div class="column">
+        <div class="columns is-centered has-text-centered">
+          <div class="column content">
+            <video id="matting-video" autoplay controls muted loop playsinline height="100%">
+              <source src="./static/videos/bread.mp4"
+                      type="video/mp4">
+            </video>
+            <p>
+              A sliced loaf of fresh bread.
+            </p>
+          </div>
+        </div>
+      </div>
+
+      <div class="column">
+        <div class="columns is-centered has-text-centered">
+          <div class="column content">
+            <video id="matting-video" autoplay controls muted loop playsinline height="100%">
+              <source src="./static/videos/corgi_boba.mp4"
+                      type="video/mp4">
+            </video>
+            <p>
+              A corgi standing up drinking boba.
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="columns is-centered has-text-centered">
+      <div class="column">
+        <div class="columns is-centered has-text-centered">
+          <div class="column content">
+            <video id="matting-video" autoplay controls muted loop playsinline height="100%">
+              <source src="./static/videos/crown.mp4"
+                      type="video/mp4">
+            </video>
+            <p>
+              An imperial state crown of England.
+            </p>
+          </div>
+        </div>
+      </div>
+
+      <div class="column">
+        <div class="columns is-centered has-text-centered">
+          <div class="column content">
+            <video id="matting-video" autoplay controls muted loop playsinline height="100%">
+              <source src="./static/videos/garbage.mp4"
+                      type="video/mp4">
+            </video>
+            <p>
+              A beautiful dress made out of garbage bags, on a mannequin.
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="columns is-centered has-text-centered">
+      <div class="column">
+        <div class="columns is-centered has-text-centered">
+          <div class="column content">
+            <video id="matting-video" autoplay controls muted loop playsinline height="100%">
+              <source src="./static/videos/roof.mp4"
+                      type="video/mp4">
+            </video>
+            <p>
+              A 3D model of adorable cottage with a thatched roof.
+            </p>
+          </div>
+        </div>
+      </div>
+
+      <div class="column">
+        <div class="columns is-centered has-text-centered">
+          <div class="column content">
+            <video id="matting-video" autoplay controls muted loop playsinline height="100%">
+              <source src="./static/videos/silver.mp4"
+                      type="video/mp4">
+            </video>
+            <p>
+              A silver platter piled high with fruits.
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="columns is-centered has-text-centered">
+      <div class="column">
+        <div class="columns is-centered has-text-centered">
+          <div class="column content">
+            <video id="matting-video" autoplay controls muted loop playsinline height="100%">
+              <source src="./static/videos/tarantula.mp4"
+                      type="video/mp4">
+            </video>
+            <p>
+              A tarantula, highly detailed.
+            </p>
+          </div>
+        </div>
+      </div>
+
+      <div class="column">
+        <div class="columns is-centered has-text-centered">
+          <div class="column content">
+            <video id="matting-video" autoplay controls muted loop playsinline height="100%">
+              <source src="./static/videos/tiger_ice.mp4"
+                      type="video/mp4">
+            </video>
+            <p>
+              A tiger eating an ice cream cone.
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="columns is-centered has-text-centered">
+      <div class="column">
+        <div class="columns is-centered has-text-centered">
+          <div class="column content">
+            <video id="matting-video" autoplay controls muted loop playsinline height="100%">
+              <source src="./static/videos/tigerdoctor.mp4"
+                      type="video/mp4">
+            </video>
+            <p>
+              A tiger dressed as a doctor.
+            </p>
+          </div>
+        </div>
+      </div>
+
+      <div class="column">
+        <div class="columns is-centered has-text-centered">
+          <div class="column content">
+            <video id="matting-video" autoplay controls muted loop playsinline height="100%">
+              <source src="./static/videos/wedding.mp4"
+                      type="video/mp4">
+            </video>
+            <p>
+              Wedding dress made out of tenacles.
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+<footer class="footer">
+  <div class="container">
+    <div class="columns is-centered">
+      <div class="column is-8">
+        <div class="content">
+          <p>
+            The template for this website is from <a href="https://github.com/nerfies/nerfies.github.io">here</a>, and we appreciate their kindness in open-sourcing it.
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+</footer>
+
+</body>
+</html>
